@@ -24,6 +24,8 @@ export default class MainPresenter {
 
   #currentSortType = SortType.DEFAULT;
   #renderedFilmsCount = 0;
+  /** @type {FilmPresenter | null} */
+  #openedFilmPresenter = null;
 
   constructor(
     mainContainer,
@@ -75,8 +77,8 @@ export default class MainPresenter {
   };
 
   #renderCard = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListContainer, this.#bodyContainer, this.#commentModel.comments);
-    filmPresenter.init(film);
+    const filmPresenter = new FilmPresenter(this.#filmListContainer, this.#bodyContainer, this.#onPopupOpen, this.#onPopupClose);
+    filmPresenter.init(film, this.#commentModel.comments);
 
     this.#filmPresenters.push(filmPresenter);
   };
@@ -95,6 +97,24 @@ export default class MainPresenter {
 
   #clearFilmList = () => {
     this.#filmPresenters.forEach((filmPresenter) => filmPresenter.destroy());
+  };
+
+  /**
+   * @param {FilmPresenter} filmPresenter
+   */
+  #onPopupOpen = (filmPresenter) => {
+    if (this.#openedFilmPresenter === filmPresenter) {
+      return;
+    }
+
+    if (this.#openedFilmPresenter) {
+      this.#openedFilmPresenter.closePopup();
+    }
+    this.#openedFilmPresenter = filmPresenter;
+  };
+
+  #onPopupClose = () => {
+    this.#openedFilmPresenter = null;
   };
 
   #onShowMoreButtonClick = () => {

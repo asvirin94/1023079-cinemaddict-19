@@ -65,7 +65,7 @@ export default class PopupView extends AbstractStatefulView {
   };
 
   #addCommentKeydownHandler = (evt) => {
-    if (isCtrlPlusEnterPressed) {
+    if (isCtrlPlusEnterPressed(evt)) {
       const commentToAdd = {
         id: Math.random().toString(),
         comment: he.encode(evt.target.value),

@@ -10,7 +10,6 @@ const DEFAULT_COMMENT_EMOJI = COMMENTS_EMOTIONS[0];
 
 dayjs.extend(relativeTime);
 
-
 export default class PopupView extends AbstractStatefulView {
   #handleCloseClick = null;
   #handleControlButtonClick = null;
@@ -126,5 +125,4 @@ export default class PopupView extends AbstractStatefulView {
 
     return film;
   }
-
 }

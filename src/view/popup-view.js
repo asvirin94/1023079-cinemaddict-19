@@ -1,4 +1,3 @@
-import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -39,10 +38,12 @@ export default class PopupView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
+    const commentInputElement = this.element.querySelector('.film-details__comment-input');
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeClickHandler);
     this.element.querySelector('.film-details__controls').addEventListener('click', this.#controlButtonsClickHandler);
     this.element.querySelector('.film-details__comments-list').addEventListener('click', this.#deleteCommentClickHandler);
-    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#addCommentKeydownHandler);
+    commentInputElement.addEventListener('keydown', this.#addCommentKeydownHandler);
+    commentInputElement.addEventListener('input', this.#commentInputHandler);
     this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiChangeHandler);
   }
 
@@ -68,8 +69,8 @@ export default class PopupView extends AbstractStatefulView {
     if (isCtrlPlusEnterPressed(evt)) {
       const commentToAdd = {
         id: Math.random().toString(),
-        comment: he.encode(evt.target.value),
-        emotion: this._state.commentEmoji
+        comment: this._state.commentText,
+        emotion: this._state.commentEmoji,
       };
       this.updateElement({
         comments: [...this._state.comments, commentToAdd],
@@ -81,6 +82,12 @@ export default class PopupView extends AbstractStatefulView {
       });
       this.element.scrollTo(0, this._state.scrollPosition);
     }
+  };
+
+  #commentInputHandler = (evt) => {
+    this._setState({
+      commentText: evt.target.value,
+    });
   };
 
   #deleteCommentClickHandler = (evt) => {
@@ -101,6 +108,7 @@ export default class PopupView extends AbstractStatefulView {
   #emojiChangeHandler = (evt) => {
     this.updateElement({
       commentEmoji: evt.target.value,
+      commentText: this._state.commentText,
       scrollPosition: this.element.scrollTop
     });
     this.element.scrollTo(0, this._state.scrollPosition);
@@ -117,6 +125,7 @@ export default class PopupView extends AbstractStatefulView {
     const film = {...state};
     delete film.scrollPosition;
     delete film.commentEmoji;
+    delete film.commentText;
     return film;
   }
 }

@@ -99,13 +99,13 @@ const createCommentsTemplate = (comments) => (`
     </ul>
 `);
 
-const createAddCommentFormTemplate = (commentEmoji) => (`
+const createAddCommentFormTemplate = (commentEmoji, commentText = '') => (`
     <div class="film-details__add-emoji-label">
       <img src="./images/emoji/${commentEmoji}.png" width="30" height="30" alt="emoji">
     </div>
     <label class="film-details__comment-label">
       <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here"
-        name="comment"></textarea>
+        name="comment">${commentText}</textarea>
     </label>
     <div class="film-details__emoji-list">
       ${COMMENTS_EMOTIONS.map((emotion) => `
@@ -119,12 +119,12 @@ const createAddCommentFormTemplate = (commentEmoji) => (`
 `);
 
 export const createFilmPopupTemplate = (film) => {
-  const {filmInfo, userDetails, comments, commentEmoji} = film;
+  const {filmInfo, userDetails, comments, commentEmoji, commentText} = film;
 
   const infoTemplate = createInfoTemplate(filmInfo);
   const controlButtonsTemplate = createControlButtonsTemplate(userDetails);
   const commentsTemplate = createCommentsTemplate(comments);
-  const formTemplate = createAddCommentFormTemplate(commentEmoji);
+  const formTemplate = createAddCommentFormTemplate(commentEmoji, commentText);
 
   return (
     `<section class="film-details">

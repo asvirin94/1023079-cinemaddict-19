@@ -6,8 +6,6 @@ import { COMMENTS_EMOTIONS} from '../consts.js';
 import { createFilmPopupTemplate } from './popup-view.template.js';
 import { isCtrlPlusEnterPressed } from '../utils.js';
 
-const DEFAULT_COMMENT_EMOJI = COMMENTS_EMOTIONS[0];
-
 dayjs.extend(relativeTime);
 
 export default class PopupView extends AbstractStatefulView {
@@ -15,6 +13,8 @@ export default class PopupView extends AbstractStatefulView {
   #handleControlButtonClick = null;
   #handleAddCommentSubmit = null;
   #handleDeleteCommentClick = null;
+
+  static #DEFAULT_COMMENT_EMOJI = COMMENTS_EMOTIONS[0];
 
   constructor({film, onCloseClick, onControlBtnClick, onAddComment, onDeleteComment}) {
     super();
@@ -24,7 +24,6 @@ export default class PopupView extends AbstractStatefulView {
     this.#handleControlButtonClick = onControlBtnClick;
     this.#handleAddCommentSubmit = onAddComment;
     this.#handleDeleteCommentClick = onDeleteComment;
-    this.defaultCommentEmoji = DEFAULT_COMMENT_EMOJI;
 
     this._restoreHandlers();
   }
@@ -110,7 +109,7 @@ export default class PopupView extends AbstractStatefulView {
   static parseFilmToState(film) {
     return {
       ...film,
-      commentEmoji: DEFAULT_COMMENT_EMOJI
+      commentEmoji: PopupView.#DEFAULT_COMMENT_EMOJI,
     };
   }
 

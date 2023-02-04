@@ -1,6 +1,6 @@
 import UserProfileView from './view/user-profile-view.js';
 import { render } from './framework/render.js';
-import MainPresente from './presenter/main-presenter.js';
+import MainPresenter from './presenter/main-presenter.js';
 import FilterModel from './model/filter-model.js';
 import FilmsModel from './model/films-model.js';
 import CommentsModel from './model/comments-model.js';
@@ -23,7 +23,7 @@ const commentsModel = new CommentsModel({
 
 const filterModel = new FilterModel();
 
-const mainPresenter = new MainPresente({
+const mainPresenter = new MainPresenter({
   filmsContainer: siteMain,
   filmsModel,
   commentsModel,

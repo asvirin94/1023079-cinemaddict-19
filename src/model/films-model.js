@@ -22,7 +22,7 @@ export default class FilmsModel extends Observable {
       this.#films = [];
     }
 
-    this._notify(UpdateType.INIT);
+    this._notify(UpdateType.INIT, this.#films);
   }
 
 

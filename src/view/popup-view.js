@@ -31,12 +31,6 @@ export default class PopupView extends AbstractStatefulView {
     return createFilmPopupTemplate(this._state);
   }
 
-  reset(film) {
-    this.updateElement(
-      PopupView.parseFilmToState(film)
-    );
-  }
-
   _restoreHandlers() {
     const commentInputElement = this.element.querySelector('.film-details__comment-input');
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeClickHandler);

@@ -27,7 +27,7 @@ export default class FilmsApiService extends ApiService {
   #adaptToServer(film) {
     const adaptedFilm = {
       'id': film.id,
-      'comments': film.comments,
+      'comments': film.comments.map((comment) => comment.id),
       'film_info': {
         ...film.filmInfo,
         'age_rating': film.filmInfo.ageRating,

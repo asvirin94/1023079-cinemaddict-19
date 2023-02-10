@@ -29,7 +29,8 @@ export default class FilmListPresenter {
   #filmShowMoreBtnComponent = null;
   #filmsContainer = null;
   #filmsModel = null;
-  #commentsModel = null;
+  /** @type {CommentsModel} */
+  #commentsModel;
   #filterModel = null;
   #EmptyFilmListComponent = null;
 
@@ -94,8 +95,8 @@ export default class FilmListPresenter {
       this.#renderLoading();
       return;
     }
-    const filmsToRender = this.films;
-    if(!filmsToRender.length) {
+    const films = this.films;
+    if (!films.length) {
       remove(this.#filmShowMoreBtnComponent);
       const prevEmptyListComonent = this.#EmptyFilmListComponent;
       this.#EmptyFilmListComponent = new EmptyFilmListView({filters: this.#filtersPresenter.filters, activeFilter: this.#filterModel.filter});
@@ -115,14 +116,21 @@ export default class FilmListPresenter {
     }
 
     const renderedFilmsQuantity = this.#filmListContainerComponent.element.children.length;
-    for (let i = renderedFilmsQuantity; i < renderedFilmsQuantity + toRenderQuantity; i++) {
-      this.#renderFilm(filmsToRender[i]);
-      const isLastFilm = filmsToRender[i] === filmsToRender[filmsToRender.length - 1];
-      if (isLastFilm) {
-        remove(this.#filmShowMoreBtnComponent);
-        return;
+    const filmsToRender = films.slice().splice(renderedFilmsQuantity, toRenderQuantity);
+    const commentRequests = filmsToRender.map((film) => this.#commentsModel.getFilmComments(film.id));
+    Promise.all(commentRequests).then((comments) => {
+      for (const [i, film] of filmsToRender.entries()) {
+        this.#renderFilm({
+          ...film,
+          comments: comments[i],
+        });
+        const isLastFilm = film === films[films.length - 1];
+        if (isLastFilm) {
+          remove(this.#filmShowMoreBtnComponent);
+          return;
+        }
       }
-    }
+    });
   }
 
   #rerenderUserProfile() {

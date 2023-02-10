@@ -1,10 +1,13 @@
 import PopupView from '../view/popup-view.js';
 import { isEscPressed } from '../utils.js';
+import { render } from '../framework/render';
 
-let openedPopup = null;
+/** @type {PopupPresenter} */
+let openedPopup;
 
 export default class PopupPresenter {
-  #filmPopupComponent = null;
+  /** @type {PopupView} */
+  #filmPopupComponent;
   #film = null;
 
   constructor({ film, onControlBtnClick, onAddComment, onDeleteComment }) {
@@ -23,14 +26,14 @@ export default class PopupPresenter {
       openedPopup.closePopup();
     }
     document.body.classList.add('hide-overflow');
-    document.body.appendChild(this.#filmPopupComponent.element);
+    render(this.#filmPopupComponent, document.body);
     document.addEventListener('keydown', this.#closePopupKeydownHandler);
     openedPopup = this;
   }
 
   closePopup() {
     document.body.classList.remove('hide-overflow');
-    document.body.removeChild(this.#filmPopupComponent.element);
+    this.#filmPopupComponent.closePopup();
     document.removeEventListener('keydown', this.#closePopupKeydownHandler);
     openedPopup = null;
   }
@@ -44,5 +47,4 @@ export default class PopupPresenter {
       this.closePopup();
     }
   };
-
 }

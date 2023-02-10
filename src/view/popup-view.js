@@ -12,7 +12,7 @@ export default class PopupView extends AbstractStatefulView {
   #handleAddCommentSubmit = null;
   #handleDeleteCommentClick = null;
 
-  static #DEFAULT_COMMENT_EMOJI = null;
+  static #DEFAULT_COMMENT_EMOJI = '';
 
   constructor({film, onCloseClick, onControlBtnClick, onAddComment, onDeleteComment}) {
     super();
@@ -41,11 +41,17 @@ export default class PopupView extends AbstractStatefulView {
     this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiChangeHandler);
   }
 
+  closePopup() {
+    this.updateElement({
+      commentText: '',
+      commentEmoji: PopupView.#DEFAULT_COMMENT_EMOJI,
+      scrollPosition: 0,
+    });
+    this.element.remove();
+  }
+
   #closeClickHandler = () => {
     this.#handleCloseClick();
-    this._setState({
-      commentText: ''
-    });
   };
 
   #controlButtonsClickHandler = (evt) => {

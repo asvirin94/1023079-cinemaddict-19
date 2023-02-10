@@ -42,11 +42,7 @@ export default class PopupView extends AbstractStatefulView {
   }
 
   closePopup() {
-    this.updateElement({
-      commentText: '',
-      commentEmoji: PopupView.#DEFAULT_COMMENT_EMOJI,
-      scrollPosition: 0,
-    });
+    this.#resetCommentForm();
     this.element.remove();
   }
 
@@ -83,6 +79,7 @@ export default class PopupView extends AbstractStatefulView {
         ...PopupView.parseStateToFilm(this._state),
         commentToAdd
       });
+      this.#resetCommentForm();
       this.element.scrollTo(0, this._state.scrollPosition);
     }
   };
@@ -116,6 +113,13 @@ export default class PopupView extends AbstractStatefulView {
     });
     this.element.scrollTo(0, this._state.scrollPosition);
   };
+
+  #resetCommentForm() {
+    this.updateElement({
+      commentText: '',
+      commentEmoji: PopupView.#DEFAULT_COMMENT_EMOJI,
+    });
+  }
 
   static parseFilmToState(film) {
     return {
